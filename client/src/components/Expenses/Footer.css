@@ -1,0 +1,29 @@
+.footer-48201 .copyright {
+  border-top: 1px solid black;
+}
+
+.footer-48201 .copyright p {
+  color: black;
+  margin-bottom: -20px;
+}
+
+.footer-text {
+  color: black;
+}
+
+.social {
+  flex-wrap: wrap;
+}
+
+
+.container-footer {
+  display: flex;
+  justify-content: center;        
+  margin-top: -40px;
+  margin-bottom: -40px;
+   /* Membuat kontainer mengambil seluruh tinggi layar */
+}
+
+.col-md-4 {
+  text-align: center;
+}

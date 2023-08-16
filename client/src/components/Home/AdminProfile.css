@@ -1,0 +1,114 @@
+.akun {
+    width: 67%;
+    margin-top: 7rem;
+  }
+  .akun-top__alert {
+    background-color: #a06ece !important;
+    border-radius: 12px;
+  }
+  .akun-top__arrow-left {
+    width: 25px;
+    height: 20px;
+  }
+  
+  .filter-akun {
+    width: 100%;
+    max-width: 900px; /*batasan lebar maksimum */
+    margin: 0 auto; 
+  }
+  
+  .account-list:hover {
+    background-color: #a06ece;
+    transition: background-color 0.5s;
+    color: white !important;
+  }
+  
+  .profile-chg {
+    background-color: #a06ece;
+    
+  }
+  .profile-chg p{
+    color: white;
+  }
+  
+
+  
+  .account-list:hover p {
+    color: white !important;
+  }
+  
+  .account-list:hover img {
+    filter: brightness(0) invert(1);
+  }
+  
+  .account__input:focus {
+    outline-style: none !important;
+  }
+  
+  .save-btn-akun {
+    background-color: #7126b5 !important;
+    color: #fff !important;
+    border: none !important;
+    width: 150px;
+    margin-left: 240px !important;
+    height: 48px;
+  }
+  
+  @media (max-width: 768px) {
+    /* untuk tampilan lebih kecil */
+    .akun {
+      width: 90%;
+      margin-top: 4rem;
+      padding-top: 2rem;
+    }
+  
+    .filter-akun {
+      flex-direction: column;
+      align-items: center;
+      /* text-align: center; */
+    }
+  
+    .account-list {
+      padding-bottom: 3px;
+      margin-bottom: 3px;
+    }
+  
+    .save-btn-akun {
+      width: 50%;
+    }
+  }
+  
+  .logout-button {
+    background-color: #a06ece;
+    border-color: #a06ece;
+  }
+
+  .user-card {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .user-image img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+  
+  .user-info {
+    flex: 1;
+  }
+  
+  
+  @media (min-width: 1200px) {
+    .akun {
+      width: 80%;
+      margin-top: 10rem;
+    }
+  }
+  

@@ -1,0 +1,57 @@
+.error-box {
+    border: 1px solid red;
+    border-radius: 5px;
+    padding: 8px;
+    background-color: red;
+    display: inline-block;
+    margin-left: 1100px;
+    margin-top: 10px;
+  }
+  
+  .search-data {
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    margin-right: 15px;
+  }
+
+  .error-message {
+    color: white;
+  }
+  
+  .red-button {
+    background-color: red !important;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 5px;
+  }
+
+  .red-button:hover {
+    background-color: darkred !important;
+    
+  }
+  .detail-button {
+    background-color: #338b69 !important;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 5px;
+  }
+
+  .detail-button:hover {
+    background-color: #0f4e28 !important;
+    
+  }
+
+  .side-bar-admin__logo {
+    width: 70%;
+   
+  }
+
+  
+ 

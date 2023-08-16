@@ -1,0 +1,44 @@
+.page-titles {
+    background-color:  aliceblue;
+    padding: 15px 20px;   
+    margin-bottom: 30px; 
+    border-radius: 7px;
+}
+
+.welcome-text  h4{
+    font-size: 20px;
+    color: #343957;
+}
+
+.welcome-text p {
+    margin-top: -2px;
+    font-size: 14px; 
+    
+}
+
+.card {
+    border: none;
+    background-color: aliceblue;
+    height: 130px; 
+    border-radius: 7px;
+}
+
+.card .ti-money {
+    margin-left: 30px;
+}
+
+.img-dat {
+    width: 150px;
+}
+
+.text-data {
+    margin-right: 10px;
+}
+
+.stat-digit {
+    font-size: 20px;
+    font-weight: bold;
+}
+             
+
+               
