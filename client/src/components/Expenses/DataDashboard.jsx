@@ -132,8 +132,10 @@ const DataDashboard = () => {
       <div className="row page-titles mx-0">
         <div className="col-sm-6 p-md-0">
           <div className="welcome-text">
-            <h4>Hi, {user ? user.name : ""}, welcome back!</h4>
-            <p className="mb-0">Manage your business dashboard</p>
+            <h4>
+              Hi, <span>{user ? user.name : ""}</span> welcome back!
+            </h4>
+            <p className="mb-0">Manage your business</p>
           </div>
         </div>
         {/* <div className="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
@@ -219,7 +221,7 @@ const DataDashboard = () => {
               </div>
               <div className="text-data">
                 <div className="stat-text">Customer Feedback</div>
-                <div className="stat-digit">2,781</div>
+                <div className="stat-digit">0</div>
               </div>
             </div>
           </div>

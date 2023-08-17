@@ -1,0 +1,33 @@
+
+
+/* .footer-48201 .copyright p {
+  color: black !important;
+  margin-bottom: -20px !important
+} */
+
+.footer-48201-adm {
+  background-color: aliceblue;
+  height: 120px;
+ 
+  
+}
+
+.footer-text {
+  color: black !important;
+}
+
+.social {
+  flex-wrap: wrap !important;
+}
+
+
+.container-footer-adm {
+  display: flex !important;
+  justify-content: center !important;        
+
+  
+}
+
+.col-md-4 {
+  text-align: center !important;
+}
