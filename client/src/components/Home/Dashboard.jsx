@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Modal, Button, Image, Dropdown, Navbar } from "react-bootstrap";
+import FooterAdmin from "../Expenses/FooterAdmin";
 import ModalInvitation from "../Expenses/ModalInvitation";
 import DataDashboard from "../Expenses/DataDashboard";
 import Cookies from "js-cookie"; // Import js-cookie package
@@ -98,7 +99,7 @@ const Dashboard = () => {
                   Dashboard
                 </h5>
                 <Image
-                  className="side-bar-admin__icon"
+                  className="side-bar-admin__icon_add"
                   src="/add-icon.png"
                   onClick={handleOpenModal} // Add onClick event handler to open the modal
                   style={{
@@ -123,10 +124,10 @@ const Dashboard = () => {
                   <div className="side-bar-admin__list text-dark d-flex align-items-center py-3 px-4 mb-1">
                     <Image
                       className="side-bar-admin__icon"
-                      src="users-icon.svg"
+                      src="sharingan-removebg-preview.png"
                     />
                     <div className="ms-2">
-                      <p style={{}} className="mb-0 text-muted">
+                      <p style={{}} className="mb-0 text-muted sd-family-name">
                         {invitation.familyName}
                       </p>{" "}
                       {/* Include the groom's name */}
@@ -183,11 +184,12 @@ const Dashboard = () => {
                   Add
                 </Button>
               </div>
+
               <div className="Card main-admin d-flex flex-wrap mt-4">
                 {invitationsData.map((invitation) => (
                   <div
                     key={invitation.id} // Assuming the invitations have an 'id' property
-                    className="main-admin__card bg-warning-subtle shadow rounded-3 me-2 mb-4"
+                    className="main-admin__card bg-warning-subtle shadow rounded-3 me-2 mb-4 "
                     style={{ cursor: "pointer" }}
                   >
                     <div className="d-flex p-4 pb-2">
@@ -202,16 +204,25 @@ const Dashboard = () => {
                       className="text-decoration-none"
                     >
                       <p className="text-det text-center mb-0 py-1">
-                        Lihat Detail
+                        See Details
                       </p>
                     </Link>
                   </div>
                 ))}
               </div>
+              <div className="d-flex justify-content-center align-items-center ">
+                <img
+                  style={{ width: "15%", marginTop: "-75px" }}
+                  src="./divider-icon.png"
+                  alt="Divider Icon"
+                />
+              </div>
             </div>
+            <FooterAdmin />
           </div>
         </div>
       </div>
+
       <Modal show={showConfirmationModal} onHide={cancelLogoutHandler} centered>
         <Modal.Body>
           <p className="mb-3">Are you sure you want to logout?</p>

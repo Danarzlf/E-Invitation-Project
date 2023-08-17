@@ -44,15 +44,15 @@ async function getStoriesById(req, res) {
   }
 }
 
-// const getAllForYous = catchAsync(async (req, res) => {
-//   const foryousData = await foryous.findAll();
-//   res.status(200).json({
-//     status: "success",
-//     data: {
-//       foryous: foryousData,
-//     },
-//   });
-// });
+const getAllStories = catchAsync(async (req, res) => {
+  const storiesData = await stories.findAll();
+  res.status(200).json({
+    status: "success",
+    data: {
+      stories: storiesData,
+    },
+  });
+});
 
 // const updateForYous = catchAsync(async (req, res) => {
 //   const { name, invitation_id } = req.body;
@@ -145,7 +145,7 @@ const deleteStories = catchAsync(async (req, res) => {
 module.exports = {
   createStories,
   getStoriesById,
-  //   getAllForYous,
+  getAllStories,
   //   updateForYous,
   deleteStories,
   //   getForYousByName,

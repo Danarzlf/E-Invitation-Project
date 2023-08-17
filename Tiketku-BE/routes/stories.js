@@ -10,7 +10,7 @@ const Authentication = require("../middlewares/authenticate");
 // API
 router.post("/create-stories", Authentication, Stories.createStories);
 router.get("/:id", Stories.getStoriesById);
-// router.get("/", ForYous.getAllForYous);
+router.get("/", Stories.getAllStories);
 // router.put("/:id", ForYous.updateForYous);
 router.delete("/:id", Stories.deleteStories);
 // router.get("/search/:name", ForYous.getForYousByName);

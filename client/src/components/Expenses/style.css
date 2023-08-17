@@ -10,6 +10,10 @@
     color: #343957;
 }
 
+.welcome-text  span{
+    font-weight: 800;
+}
+
 .welcome-text p {
     margin-top: -2px;
     font-size: 14px; 

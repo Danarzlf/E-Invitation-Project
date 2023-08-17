@@ -1,19 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import { Link, useNavigate, useLocation } from "react-router-dom"; // Import useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const ModalStories = ({ show, handleClose }) => {
   const [year, setYear] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [invitationData, setInvitationData] = useState({});
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Menggunakan useLocation untuk mendapatkan nilai invitation_id dari query string
+  const fetchInvitationData = async () => {
+    try {
+      const token = Cookies.get("token");
+      if (!token) {
+        navigate("/who");
+        return;
+      }
+
+      const response = await fetch(
+        `http://localhost:8000/api/v1/invitation/${invitation_id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Terjadi kesalahan saat mengambil data undangan.");
+      }
+
+      const data = await response.json();
+      console.log("Invitation data:", data);
+      setInvitationData(data);
+    } catch (error) {
+      console.error(
+        "Terjadi kesalahan saat mengambil data undangan:",
+        error.message
+      );
+      setError("Terjadi kesalahan saat mengambil data undangan.");
+    }
+  };
+
+  const handleDeleteStory = async (storyId) => {
+    try {
+      const token = Cookies.get("token");
+
+      const response = await fetch(
+        `http://localhost:8000/api/v1/stories/${storyId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Terjadi kesalahan saat menghapus kisah.");
+      }
+
+      // Refresh data after successful deletion
+      fetchInvitationData();
+    } catch (error) {
+      console.error("Terjadi kesalahan saat menghapus kisah:", error.message);
+      setError("Terjadi kesalahan saat menghapus kisah.");
+    }
+  };
+
   const location = useLocation();
-  const pathnameParts = location.pathname.split("/"); // Pisahkan bagian dari pathname
-  const invitation_id = pathnameParts[pathnameParts.length - 1]; // Ambil bagian terakhir dari pathname sebagai invitation_id
+  const pathnameParts = location.pathname.split("/");
+  const invitation_id = pathnameParts[pathnameParts.length - 1];
+
+  useEffect(() => {
+    fetchInvitationData();
+  }, [invitation_id, navigate]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
@@ -61,8 +126,22 @@ const ModalStories = ({ show, handleClose }) => {
       <Modal.Header closeButton>
         <Modal.Title>Create Stories</Modal.Title>
       </Modal.Header>
+
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
+          {invitationData?.data?.stories.map((story, index) => (
+            <div key={index} className="carousel-content">
+              <h1 style={{ color: "black" }}>
+                {story.year}{" "}
+                <img
+                  style={{ width: "20px", cursor: "pointer" }}
+                  src="/trash.png"
+                  onClick={() => handleDeleteStory(story.id)}
+                />
+              </h1>
+              <p style={{ color: "black" }}>{story.description}</p>
+            </div>
+          ))}
           <Form.Group className="mb-3">
             <Form.Label>Tahun</Form.Label>
             <Form.Control

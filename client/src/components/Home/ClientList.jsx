@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navbar, Image, Button, Dropdown, Modal } from "react-bootstrap";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import FooterAdmin from "../Expenses/FooterAdmin";
 import { useParams } from "react-router-dom";
 import ModalStories from "../Expenses/ModalStories";
 import ModalBanks from "../Expenses/ModalBanks";
@@ -22,6 +23,8 @@ function ClientList() {
     useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showModalBanks, setShowModalBanks] = useState(false);
+  const [deleteConfirmationId, setDeleteConfirmationId] = useState(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const navigate = useNavigate();
 
@@ -45,6 +48,11 @@ function ClientList() {
 
   const handleDetailClick = (foryou) => {
     setSelectedInvitationForYou(foryou);
+  };
+
+  const handleDeleteClick = (foryouId) => {
+    setDeleteConfirmationId(foryouId);
+    setShowDeleteConfirmation(true);
   };
 
   const submitNama = async () => {
@@ -176,6 +184,53 @@ function ClientList() {
     }
   };
 
+  const handleConfirmDelete = async () => {
+    try {
+      const token = Cookies.get("token");
+      if (!token) {
+        navigate("/who");
+        return;
+      }
+
+      const response = await axios.delete(
+        `http://localhost:8000/api/v1/foryous/${deleteConfirmationId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 204) {
+        // Remove the deleted invitation from foryousData state
+        const updatedForyous = foryousData.filter(
+          (foryou) => foryou.id !== deleteConfirmationId
+        );
+
+        setForyousData(updatedForyous);
+        // Refresh the page
+      } else {
+        console.error("Failed to delete invitation.");
+      }
+    } catch (error) {
+      console.error("Error deleting invitation:", error);
+    }
+
+    // Close the delete confirmation modal
+    setShowDeleteConfirmation(false);
+    refreshPage();
+  };
+
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage("");
+      }, 3000);
+
+      return () => clearTimeout(timer); // Membersihkan timer jika komponen unmount sebelum timer selesai
+    }
+  }, [errorMessage]);
+
   const logoutHandler = () => {
     // Menampilkan modal konfirmasi saat logout
     setShowConfirmationModal(true);
@@ -242,7 +297,7 @@ function ClientList() {
                   <div className="side-bar-admin__list text-dark d-flex align-items-center py-3 px-4 mb-1">
                     <Image
                       className="side-bar-admin__icon"
-                      src="users-icon.svg"
+                      src="/sharingan-removebg-preview.png"
                     />
                     <div className="ms-2">
                       <p style={{}} className="mb-0 text-muted">
@@ -266,7 +321,11 @@ function ClientList() {
                   variant="transparent"
                   id="dropdown-basic"
                   className="border-0"
-                  style={{ backgroundColor: "#343957", marginLeft: "20px" }}
+                  style={{
+                    backgroundColor: "#343957",
+                    marginLeft: "20px",
+                    color: "white", // Ubah warna teks dropdown toggle menjadi putih
+                  }}
                 >
                   {/* <Image src="/fi_user_org.svg" /> */}
                 </Dropdown.Toggle>
@@ -290,14 +349,17 @@ function ClientList() {
                       className="text-decoration-none text-dark fw-bold d-flex align-items-center"
                     >
                       <Image
-                        className="breadcrumb__img me-1"
-                        src="dashboard-icon.svg"
-                      />{" "}
+                        className="side-bar-admin__icon me-2"
+                        src="/dashboard-icon.svg"
+                      />
                       Dashboard
                     </Link>
                   </li>
-                  <li className="breadcrumb-item active" aria-current="page">
-                    Client
+                  <li
+                    style={{ marginTop: "3px", marginLeft: "6px" }}
+                    aria-current="page"
+                  >
+                    / Client
                   </li>
                 </ol>
               </nav>
@@ -319,38 +381,59 @@ function ClientList() {
                   </Button>
                 </div>
                 {errorMessage && (
-                  <div className="error-box">
-                    <span className="error-message">{errorMessage}</span>
+                  <div
+                    style={{
+                      position: "absolute", //setelah muncul posisi yang lain tidak terpengaruh (bergerak)
+                      marginLeft: "1100px",
+                      marginTop: "10px",
+                    }}
+                  >
+                    <span className="error-message text-danger">
+                      {errorMessage}
+                    </span>
                   </div>
                 )}
 
-                <Image
-                  className="side-bar-admin__icon"
-                  src="./add-icon.png"
-                  onClick={handleOpenModal} // Add onClick event handler to open the modal
-                  style={{
-                    filter:
-                      "invert(100%) sepia(0%) saturate(0%) hue-rotate(325deg) brightness(104%) contrast(101%)",
-                  }}
-                />
+                <br />
 
-                <Image
-                  className="side-bar-admin__icon"
-                  src="./add-icon.png"
-                  onClick={handleOpenModalBanks} // Add onClick event handler to open the modal
-                  style={{
-                    filter:
-                      "invert(100%) sepia(0%) saturate(0%) hue-rotate(325deg) brightness(104%) contrast(101%)",
-                  }}
-                />
+                <div className="d-flex align-items-center mdl-stories">
+                  <p className="mb-0 me-2 fw-bold">Stories</p>
+                  <Image
+                    className="side-bar-admin__icon"
+                    src="/storiess.png"
+                    onClick={handleOpenModal} // Add onClick event handler to open the modal
+                    style={{
+                      cursor: "pointer",
+                      width: "50px",
+                      height: "50px",
+                      // filter:
+                      //   "invert(100%) sepia(0%) saturate(0%) hue-rotate(325deg) brightness(104%) contrast(101%)",
+                    }}
+                  />
+                </div>
 
-                <h4 className="mb-4">List Nama Tujuan</h4>
+                <div className="d-flex align-items-center mb-5">
+                  <p className="mb-0 me-2 fw-bold">Banks</p>
+                  <Image
+                    className="side-bar-admin__icon  mt-2"
+                    src="/gft.png"
+                    onClick={handleOpenModalBanks} // Add onClick event handler to open the modal
+                    style={{
+                      cursor: "pointer",
+                      width: "50px",
+                      height: "50px",
+                      marginLeft: "6px",
+                    }}
+                  />
+                </div>
+
+                <h4 className="mb-4">List Nama Tujuan </h4>
 
                 <table className="table table-striped-columns text-center">
                   <thead>
                     <tr>
                       <th style={{ width: "50px" }}>No</th>
-                      <th>Nama</th>
+                      <th>Name</th>
                       <th>ID</th>
                       <th>Action</th>
                     </tr>
@@ -363,7 +446,12 @@ function ClientList() {
                         <td>{foryou.id}</td>
 
                         <td>
-                          <Button className="red-button">Delete</Button>
+                          <Button
+                            className="red-button"
+                            onClick={() => handleDeleteClick(foryou.id)}
+                          >
+                            Delete
+                          </Button>
                           {/* <Link
                           to={`/for-you/${foryou.name}`}
                           className="detail-button"
@@ -381,7 +469,7 @@ function ClientList() {
                         </Link> */}
 
                           {/* FIX DIBAWAH INI */}
-                          {/* <Link
+                          <Link
                             to={{
                               pathname: "/wedding",
                               search: `?name=${encodeURIComponent(
@@ -389,19 +477,23 @@ function ClientList() {
                               )}`,
                             }}
                             className="detail-button"
+                            target="_blank" // Tambahkan atribut target untuk membuka di tab baru
                           >
                             Detail
-                          </Link> */}
-                          <a
-                            target="blank"
-                            href={`/wedding?name=${encodeURIComponent(
-                              foryou.name
-                            )}`}
-                            className="detail-button"
-                          >
-                            Detail
-                          </a>
-                          <Button className="red-button">Salin Link</Button>
+                          </Link>
+
+                          {/* <Button className="detail-button">
+                            <a
+                              target="blank"
+                              href={`/wedding?name=${encodeURIComponent(
+                                foryou.name
+                              )}`}
+                            >
+                              See
+                            </a>
+                          </Button>
+                          */}
+                          <Button className="copy-txt">Copy Link</Button>
                         </td>
                       </tr>
                     ))}
@@ -409,6 +501,7 @@ function ClientList() {
                 </table>
               </div>
             </div>
+            <FooterAdmin />
           </div>
         </div>
       </div>
@@ -429,6 +522,35 @@ function ClientList() {
           </div>
         </Modal.Body>
       </Modal>
+      <Modal
+        style={{
+          marginTop: "280px",
+          textAlign: "center",
+        }}
+        show={showDeleteConfirmation}
+        onHide={() => setShowDeleteConfirmation(false)}
+      >
+        <Modal.Body
+          style={{
+            backgroundColor: "#343957",
+          }}
+        >
+          <p className="text-white ">
+            Are you sure you want to delete this invitees?
+          </p>
+          <br />
+          <Button
+            className="cancel-button"
+            onClick={() => setShowDeleteConfirmation(false)}
+          >
+            Cancel
+          </Button>
+          <Button className="red-button" onClick={() => handleConfirmDelete()}>
+            Delete
+          </Button>
+        </Modal.Body>
+      </Modal>
+
       <ModalStories show={showModal} handleClose={handleCloseModal} />
       <ModalBanks show={showModalBanks} handleClose={handleCloseModalBanks} />
     </>

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 
@@ -13,6 +13,76 @@ const ModalBanks = ({ show, handleClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
+  const [invitationData, setInvitationData] = useState({});
+
+  // Get the invitation_id from the URL
+  const pathnameParts = location.pathname.split("/");
+  const invitation_id = pathnameParts[pathnameParts.length - 1];
+
+  // Define the fetchInvitationData function
+  const fetchInvitationData = async () => {
+    try {
+      const token = Cookies.get("token");
+      if (!token) {
+        navigate("/who");
+        return;
+      }
+
+      const response = await fetch(
+        `http://localhost:8000/api/v1/invitation/${invitation_id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Terjadi kesalahan saat mengambil data undangan.");
+      }
+
+      const data = await response.json();
+      setInvitationData(data);
+    } catch (error) {
+      console.error(
+        "Terjadi kesalahan saat mengambil data undangan:",
+        error.message
+      );
+      setError("Terjadi kesalahan saat mengambil data undangan.");
+    }
+  };
+
+  const handleDeleteStory = async (bankId) => {
+    try {
+      const token = Cookies.get("token");
+
+      const response = await fetch(
+        `http://localhost:8000/api/v1/banks/${bankId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Terjadi kesalahan saat menghapus kisah.");
+      }
+
+      // Refresh data after successful deletion
+      fetchInvitationData();
+    } catch (error) {
+      console.error("Terjadi kesalahan saat menghapus kisah:", error.message);
+      setError("Terjadi kesalahan saat menghapus kisah.");
+    }
+  };
+
+  useEffect(() => {
+    fetchInvitationData();
+  }, [invitation_id, navigate]);
 
   const nameBankChangeHandler = (event) => {
     setEnteredNameBank(event.target.value);
@@ -60,12 +130,6 @@ const ModalBanks = ({ show, handleClose }) => {
     formData.append("bankOwner", enteredBankOwner);
     formData.append("noRek", enteredNoRek);
     formData.append("image", selectedFile);
-
-    // Get the invitation_id from the URL
-    const pathnameParts = location.pathname.split("/"); // Separate parts of the pathname
-    const invitation_id = pathnameParts[pathnameParts.length - 1]; // Get the last part of the pathname as invitation_id
-
-    // Append the invitation_id to the formData
     formData.append("invitation_id", invitation_id);
 
     try {
@@ -106,6 +170,25 @@ const ModalBanks = ({ show, handleClose }) => {
       </Modal.Header>
       <Form onSubmit={submitHandler}>
         <Modal.Body>
+          <div className="banks-container">
+            {invitationData?.data?.banks.map((bank, index) => (
+              <div className="bank-card" key={index}>
+                <img
+                  style={{ width: "55%", marginTop: "20px" }}
+                  src={bank.imageQR}
+                  alt={`Bank QR Code for ${bank.nameBank}`}
+                />
+                <img
+                  style={{ width: "20px", cursor: "pointer" }}
+                  src="/trash.png"
+                  onClick={() => handleDeleteStory(bank.id)}
+                />
+                <h4 className="mt-5">{bank.nameBank}</h4>
+                <p>{bank.noRek}</p>
+                <p>{bank.bankOwner}</p>
+              </div>
+            ))}
+          </div>
           <Form.Group controlId="nameBank">
             <Form.Label>Name Bank</Form.Label>
             <Form.Control
