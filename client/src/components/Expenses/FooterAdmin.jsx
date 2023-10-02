@@ -15,7 +15,7 @@ export default function FooterAdmin() {
         <div className="container-footer-adm">
           <div className="col-md-4 pr-md-5 col-12 ">
             <Image
-              className="history-top__arrow-left my-2 mb-2 mt-2"
+              className="history-top__arrow-left my-2 mb-2 mt-2 logo-product-admin"
               src="/narrgather123.png"
               alt="logo-travelesia"
               style={{ width: "18%" }}
@@ -31,7 +31,9 @@ export default function FooterAdmin() {
         <div className="col-12 text-center">
           <div className="copyright-adm">
             <p>
-              <small>&copy; 2019-2023 All rights reserved.</small>
+              <small className="text-white">
+                &copy; 2019-2023 All rights reserved.
+              </small>
             </p>
           </div>
         </div>

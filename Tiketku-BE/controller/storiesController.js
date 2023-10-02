@@ -3,11 +3,36 @@ const { stories } = require("../models");
 const catchAsync = require("../utils/catchAsync");
 const moment = require("moment");
 const { Op } = require("sequelize");
+const imagekit = require("../lib/imageKits");
 
 async function createStories(req, res) {
   try {
     const { year, description, invitation_id } = req.body;
+
+    const file = req.file;
+
+    // validasi utk format file image
+    const validFormat =
+      file.mimetype == "image/png" ||
+      file.mimetype == "image/jpg" ||
+      file.mimetype == "image/jpeg" ||
+      file.mimetype == "image/gif";
+    if (!validFormat) {
+      throw new ApiError(httpStatus.BAD_REQUEST, "Wrong Image Format");
+    }
+
+    // untuk dapat extension file nya
+    const split = file.originalname.split(".");
+    const ext = split[split.length - 1];
+
+    // upload file ke imagekit
+    const img = await imagekit.upload({
+      file: file.buffer, //required
+      fileName: `IMG-${Date.now()}.${ext}`, //required
+    });
+
     const newStories = await stories.create({
+      image: img.url,
       year,
       description,
       invitation_id,

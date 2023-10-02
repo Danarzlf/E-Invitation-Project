@@ -6,10 +6,12 @@
 } */
 
 .footer-48201-adm {
-  background-color: aliceblue;
-  height: 120px;
- 
-  
+  background-color: #9FB6CD;
+  height: 120px; 
+}
+
+.logo-product-admin {
+  filter: invert(1) grayscale(100%) brightness(200%);
 }
 
 .footer-text {

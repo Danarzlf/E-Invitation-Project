@@ -51,8 +51,8 @@ async function sendOTPByEmail(email, otp) {
           margin-bottom: 20px;
         }
         .otp {
-          background-color:#686868;
-          color: #000000;
+          background-color:#343957;
+          color: #ffffff;
           font-size: 24px;
           font-weight: bold;
           padding: 10px;
@@ -61,7 +61,7 @@ async function sendOTPByEmail(email, otp) {
           margin: 0 auto;
         }
         .box-purple {
-          background-color: #686868;
+          background-color: #343957;
           width: 100%;
           padding : 18px;
           height: 150px;
@@ -95,7 +95,7 @@ async function sendOTPByEmail(email, otp) {
     attachments: [
       {
         filename: "narrgather123.png",
-        path: path.join(__dirname, "../public/images/narrgather123.png"),
+        path: path.join(__dirname, "../public/images/narrgather1234.png"),
         cid: "logo",
       },
     ],

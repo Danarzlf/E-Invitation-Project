@@ -404,7 +404,15 @@ body {
           It looks like one of the developers fell asleep
         </div>
         <a href="/">
-          <button className="error__button error__button--active">
+          <button
+            style={{
+              backgroundColor: "black",
+              color: "white",
+              marginTop: "10px",
+              width: "180px",
+              borderRadius: "10px",
+            }}
+          >
             BACK TO HOME
           </button>
         </a>

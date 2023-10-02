@@ -138,6 +138,11 @@ const generateLink = catchAsync(async (req, res) => {
     });
   }
 
+  // check status verifikasi pengguna
+  if (!user.verified) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "User is not verified");
+  }
+
   // Generate reset token
   const resetToken = jwt.sign({ email: user.email }, "rahasia", {
     expiresIn: "1h",
@@ -145,11 +150,11 @@ const generateLink = catchAsync(async (req, res) => {
 
   // Set reset password token and expiration time
   user.resetPasswordToken = resetToken;
-  user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+  user.resetPasswordExpires = Date.now() + 360000; // Token expires in 1 hour
   await user.save();
 
   // Generate the reset password link
-  const resetPasswordLink = `https://travelesia-fe-production.up.railway.app/reset-password?token=${resetToken}`;
+  const resetPasswordLink = `http://localhost:3000/reset-password?token=${resetToken}`;
 
   // Send the reset password link via email
   await sendEmailResetPassword(user.email, resetPasswordLink); // Make sure you have implemented this function
@@ -204,33 +209,33 @@ const resetPasswordToken = catchAsync(async (req, res) => {
   }
 });
 
-const resetPassword = catchAsync(async (req, res) => {
-  const { email, password } = req.body;
+// const resetPassword = catchAsync(async (req, res) => {
+//   const { email, password } = req.body;
 
-  // Cari user berdasarkan email
-  const user = await users.findOne({
-    where: {
-      email,
-    },
-  });
+//   // Cari user berdasarkan email
+//   const user = await users.findOne({
+//     where: {
+//       email,
+//     },
+//   });
 
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User doesn't exist");
-  }
+//   if (!user) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "User doesn't exist");
+//   }
 
-  // Enkripsi password baru
-  const hashedPassword = bcrypt.hashSync(password, 10);
+//   // Enkripsi password baru
+//   const hashedPassword = bcrypt.hashSync(password, 10);
 
-  // Update password user
-  await user.update({
-    password: hashedPassword,
-  });
+//   // Update password user
+//   await user.update({
+//     password: hashedPassword,
+//   });
 
-  res.status(200).json({
-    status: "success",
-    message: "Password has been reset",
-  });
-});
+//   res.status(200).json({
+//     status: "success",
+//     message: "Password has been reset",
+//   });
+// });
 
 const verifyOTP = catchAsync(async (req, res) => {
   const { email, otp } = req.body;
@@ -385,6 +390,6 @@ module.exports = {
   getUserByToken,
   verifyOTP,
   generateLink,
-  resetPassword,
+  // resetPassword,
   resetPasswordToken,
 };

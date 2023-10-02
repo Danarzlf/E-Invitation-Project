@@ -48,6 +48,8 @@ const Dashboard = () => {
       );
       const invitationsData = response.data.data.invitations;
       setInvitationsData(invitationsData);
+
+      console.log("ini datanya", invitationsData);
     } catch (error) {
       console.error("Error fetching invitations data:", error);
       // If there's an error or the token is invalid, navigate to the /who page
@@ -149,7 +151,7 @@ const Dashboard = () => {
                   id="dropdown-basic"
                   className="border-0"
                   style={{
-                    backgroundColor: "#343957",
+                    backgroundColor: "#313d8f",
                     marginLeft: "20px",
                     color: "white", // Ubah warna teks dropdown toggle menjadi putih
                   }}
@@ -177,7 +179,7 @@ const Dashboard = () => {
                   style={{
                     marginRight: "10px",
                     marginTop: "60px",
-                    backgroundColor: "#343957",
+                    backgroundColor: "#313d8f",
                     width: "130px",
                   }}
                 >
@@ -224,8 +226,8 @@ const Dashboard = () => {
       </div>
 
       <Modal show={showConfirmationModal} onHide={cancelLogoutHandler} centered>
-        <Modal.Body>
-          <p className="mb-3">Are you sure you want to logout?</p>
+        <Modal.Body style={{ backgroundColor: "#343957" }}>
+          <p className="mb-3 text-white">Are you sure you want to logout?</p>
           <div className="d-flex justify-content-end gap-2">
             <Button variant="secondary" onClick={cancelLogoutHandler}>
               Cancel
@@ -233,7 +235,7 @@ const Dashboard = () => {
             <Button
               className="logout-button"
               onClick={confirmLogoutHandler}
-              style={{ backgroundColor: "#7126b5", border: "none" }}
+              style={{ backgroundColor: "red", border: "none" }}
             >
               Logout
             </Button>

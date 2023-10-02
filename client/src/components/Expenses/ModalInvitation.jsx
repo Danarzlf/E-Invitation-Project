@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie"; // Import js-cookie package
 
 const ModalInvitation = ({ show, handleClose }) => {
+  const [image, setImage] = useState(null);
   const [familyName, setFamilyName] = useState("");
   const [familyName2, setFamilyName2] = useState("");
   const [groomDad, setGroomDad] = useState("");
@@ -26,81 +27,80 @@ const ModalInvitation = ({ show, handleClose }) => {
   const [brideSosmed1, setBrideSosmed1] = useState("");
   const [brideSosmed2, setBrideSosmed2] = useState("");
   const [brideSosmed3, setBrideSosmed3] = useState("");
+  const [urlCouple, setUrlCouple] = useState("");
+  const [noTemplate, setNoTemplate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const handleImageChange = (event) => {
+    setImage(event.target.files[0]);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(""); // Reset error state
-    setIsLoading(true); // Set loading state to true
+    setError("");
+    setIsLoading(true);
 
     try {
-      // Check if the authentication token exists in the cookie
       const token = Cookies.get("token");
       if (!token) {
-        // If there's no token, redirect the user to the login page
         navigate("/who");
         return;
       }
 
-      // Kirim data pemesanan ke server
+      const formData = new FormData();
+      formData.append("image", image);
+      formData.append("familyName", familyName);
+      formData.append("familyName2", familyName2);
+      formData.append("groomDad", groomDad);
+      formData.append("groomMom", groomMom);
+      formData.append("brideDad", brideDad);
+      formData.append("brideMom", brideMom);
+      formData.append("groom", groom);
+      formData.append("bride", bride);
+      formData.append("day", day);
+      formData.append("date", date);
+      formData.append("address", address);
+      formData.append("time", time);
+      formData.append("place", place);
+      formData.append("linkMap", linkMap);
+      formData.append("quotes", quotes);
+      formData.append("quoter", quoter);
+      formData.append("groomSosmed1", groomSosmed1);
+      formData.append("groomSosmed2", groomSosmed2);
+      formData.append("groomSosmed3", groomSosmed3);
+      formData.append("brideSosmed1", brideSosmed1);
+      formData.append("brideSosmed2", brideSosmed2);
+      formData.append("brideSosmed3", brideSosmed3);
+      formData.append("urlCouple", urlCouple);
+      formData.append("noTemplate", noTemplate);
+      formData.append("user_id", 1); // Ganti dengan user ID yang sesuai
+
       const response = await fetch(
         "http://localhost:8000/api/v1/invitation/create-invitations",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include the token in the headers
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            familyName,
-            familyName2,
-            groomDad,
-            groomMom,
-            brideDad,
-            brideMom,
-            groom,
-            bride,
-            day,
-            date,
-            address,
-            time,
-            place,
-            linkMap,
-            quotes,
-            quoter,
-            groomSosmed1,
-            groomSosmed2,
-            groomSosmed3,
-            brideSosmed1,
-            brideSosmed2,
-            brideSosmed3,
-            user_id: 1,
-          }),
+          body: formData,
         }
       );
 
       if (!response.ok) {
-        // Tangani kesalahan jika permintaan tidak berhasil
         throw new Error("Terjadi kesalahan saat membuat pemesanan.");
       }
 
-      // Pemesanan berhasil, tampilkan pesan sukses atau lakukan aksi lainnya
       console.log("Pemesanan berhasil!");
-      // Misalnya, Anda dapat menampilkan pesan sukses atau mengarahkan pengguna ke halaman lain
-      // setelah pemesanan berhasil dibuat.
-
-      // Tutup modal setelah pengguna menyelesaikan pemesanan
       handleClose();
       window.location.reload();
     } catch (error) {
-      // Tangani kesalahan jika terjadi
       console.error("Terjadi kesalahan saat membuat pemesanan:", error.message);
       setError("Terjadi kesalahan saat membuat pemesanan.");
     }
 
-    setIsLoading(false); // Set loading state to false
+    setIsLoading(false);
   };
 
   return (
@@ -110,6 +110,15 @@ const ModalInvitation = ({ show, handleClose }) => {
       </Modal.Header>
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
+          <Form.Group className="mb-3">
+            <Form.Label>Image</Form.Label>
+            <Form.Control
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              required
+            />
+          </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Nama Keluarga Pemesan</Form.Label>
             <Form.Control
@@ -246,6 +255,16 @@ const ModalInvitation = ({ show, handleClose }) => {
             />
           </Form.Group>
           <Form.Group className="mb-3">
+            <Form.Label>Nama URL</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Jorga-Amanda"
+              value={urlCouple}
+              onChange={(e) => setUrlCouple(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
             <Form.Label>Link Google Map Tempat</Form.Label>
             <Form.Control
               type="text"
@@ -272,6 +291,16 @@ const ModalInvitation = ({ show, handleClose }) => {
               placeholder="Stipe Miocic"
               value={quoter}
               onChange={(e) => setQuoter(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>No Template</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="1"
+              value={noTemplate}
+              onChange={(e) => setNoTemplate(e.target.value)}
               required
             />
           </Form.Group>

@@ -3,57 +3,130 @@ import React from "react";
 
 const NoAccess = () => {
   return (
-    <div>
-      <div className="moon"></div>
-      <div className="moon__crater moon__crater1"></div>
-      <div className="moon__crater moon__crater2"></div>
-      <div className="moon__crater moon__crater3"></div>
+    <>
+      <style>{` 
 
-      <div className="star star1"></div>
-      <div className="star star2"></div>
-      <div className="star star3"></div>
-      <div className="star star4"></div>
-      <div className="star star5"></div>
+$animationTime: 20s;
 
-      <div className="error">
-        <div className="error__title">Who Are You?</div>
-        <div className="error__subtitle">Hmmm...</div>
-        <div className="error__description">You Dont Have Access</div>
-        {/* <a href="/">
-          <button className="error__button error__button--active">
-            BACK TO HOME
-          </button>
-        </a> */}
+* {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom right, #EEE, #AAA);
+}
+
+h1 {
+  margin: 40px 0 20px;
+}
+
+.lock {
+  border-radius: 5px;
+  width: 55px;
+  height: 45px;
+  background-color: #333;
+  animation: dip 1s;
+  animation-delay: ($animationTime - .5);
+  
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-left: 5px solid #333;
+    height: 20px;
+    width: 15px;
+    left: calc(50% - 12.5px);
+  }
+  
+  &::before {
+    top: -30px;
+    border: 5px solid #333;
+    border-bottom-color: transparent;
+    border-radius: 15px 15px 0 0;
+    height: 30px;
+    animation: lock $animationTime, spin $animationTime;
+  }
+  
+  &::after {
+    top: 350px; 
+    left: 750px; 
+    border-right: 5px solid transparent;
+    animation: spin $animationTime;
+  }
+}
+
+@keyframes lock {
+  0% {
+    top: -45px;
+  }
+  65% {
+    top: -45px;
+  }
+  100% {
+    top: -30px;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: scaleX(-1);
+    left: calc(50% - 30px);
+  }
+  65% {
+    transform: scaleX(1);
+    left: calc(50% - 12.5px);
+  }
+}
+
+@keyframes dip {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+
+`}</style>
+      <div className="d-flex justify-content-center">
+        <img src="./lck.png" style={{ width: "80px" }} />
       </div>
-
-      <div className="astronaut">
-        <div className="astronaut__backpack"></div>
-        <div className="astronaut__body"></div>
-        <div className="astronaut__body__chest"></div>
-        <div className="astronaut__arm-left1"></div>
-        <div className="astronaut__arm-left2"></div>
-        <div className="astronaut__arm-right1"></div>
-        <div className="astronaut__arm-right2"></div>
-        <div className="astronaut__arm-thumb-left"></div>
-        <div className="astronaut__arm-thumb-right"></div>
-        <div className="astronaut__leg-left"></div>
-        <div className="astronaut__leg-right"></div>
-        <div className="astronaut__foot-left"></div>
-        <div className="astronaut__foot-right"></div>
-        <div className="astronaut__wrist-left"></div>
-        <div className="astronaut__wrist-right"></div>
-
-        <div className="astronaut__cord">
-          <canvas id="cord" height="500px" width="500px"></canvas>
-        </div>
-
-        <div className="astronaut__head">
-          <canvas id="visor" width="60px" height="60px"></canvas>
-          <div className="astronaut__head-visor-flare1"></div>
-          <div className="astronaut__head-visor-flare2"></div>
-        </div>
+      <div className="message text-center">
+        <h1>Access to this page is restricted</h1>
+        <p>
+          Please check with the site admin if you believe this is a mistake.
+        </p>
+        <button
+          className="btn-noaccess"
+          style={{
+            background: "black",
+            width: "150px",
+            height: "40px",
+            border: "none",
+            borderRadius: "10px",
+            marginTop: "10px",
+          }}
+        >
+          {" "}
+          <a className="text-white" href="/">
+            go home
+          </a>
+        </button>
       </div>
-    </div>
+    </>
   );
 };
 

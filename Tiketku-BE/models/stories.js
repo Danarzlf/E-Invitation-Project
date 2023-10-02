@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       year: DataTypes.INTEGER,
       description: DataTypes.TEXT,
+      image: DataTypes.TEXT,
       invitation_id: DataTypes.INTEGER,
     },
     {

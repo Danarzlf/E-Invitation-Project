@@ -19,6 +19,10 @@
     color: white;
   }
   
+  .btn-add-invitees {
+    background-color: #313d8f;
+  }
+
   .copy-txt {
     background-color: black !important;
     color: white;
@@ -77,8 +81,6 @@
     
   } 
 
- 
-
   .side-bar-admin__logo {
     width: 70%;
    
@@ -87,4 +89,6 @@
   .table {
     margin-bottom: 150px;
   }
+
+  
   
