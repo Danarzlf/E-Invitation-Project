@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const ModalStories = ({ show, handleClose }) => {
+  const [imageFile, setImageFile] = useState(null);
   const [year, setYear] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -91,19 +92,20 @@ const ModalStories = ({ show, handleClose }) => {
         return;
       }
 
+      const formData = new FormData();
+      formData.append("year", year);
+      formData.append("description", description);
+      formData.append("invitation_id", invitation_id);
+      formData.append("image", imageFile); // Append image to the FormData
+
       const response = await fetch(
         "http://localhost:8000/api/v1/stories/create-stories",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            year,
-            description,
-            invitation_id,
-          }),
+          body: formData,
         }
       );
 
@@ -131,6 +133,13 @@ const ModalStories = ({ show, handleClose }) => {
         <Modal.Body>
           {invitationData?.data?.stories.map((story, index) => (
             <div key={index} className="carousel-content">
+              <img
+                src={story.image}
+                style={{
+                  maxWidth: "20%", // Gambar tidak akan melebihi lebar wadah
+                  height: "auto", // Tinggi gambar disesuaikan agar proporsi terjaga
+                }}
+              />
               <h1 style={{ color: "black" }}>
                 {story.year}{" "}
                 <img
@@ -142,10 +151,21 @@ const ModalStories = ({ show, handleClose }) => {
               <p style={{ color: "black" }}>{story.description}</p>
             </div>
           ))}
+          {imageFile === null && (
+            <p className="text-danger">Pilih gambar terlebih dahulu.</p>
+          )}
+          <Form.Group className="mb-3">
+            <Form.Label>Gambar</Form.Label>
+            <Form.Control
+              type="file"
+              accept=".png, .jpg, .jpeg, .gif"
+              onChange={(e) => setImageFile(e.target.files[0])}
+            />
+          </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Tahun</Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               placeholder="2011"
               autoFocus
               required

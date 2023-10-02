@@ -5,10 +5,16 @@ const Stories = require("../controller/storiesController");
 
 // middleware
 // const Uploader = require("../middlewares/uploaders");
+const Uploader = require("../middlewares/uploaders");
 const Authentication = require("../middlewares/authenticate");
 
 // API
-router.post("/create-stories", Authentication, Stories.createStories);
+router.post(
+  "/create-stories",
+  Authentication,
+  Uploader.single("image"),
+  Stories.createStories
+);
 router.get("/:id", Stories.getStoriesById);
 router.get("/", Stories.getAllStories);
 // router.put("/:id", ForYous.updateForYous);

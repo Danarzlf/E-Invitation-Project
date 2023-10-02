@@ -7,7 +7,7 @@ import "./ForYouPage.css";
 const ForYouPage = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const name = searchParams.get("name");
+  const name = searchParams.get("to");
   const [showGiftModal, setShowGiftModal] = useState(false); // State untuk mengontrol modal
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
@@ -18,6 +18,11 @@ const ForYouPage = () => {
   const [senderName, setSenderName] = useState("");
   const [copiedText, setCopiedText] = useState("");
   const [isScreenFlashing, setIsScreenFlashing] = useState(false);
+
+  // Pisahkan URL path untuk mendapatkan urlCouple
+  const urlParts = location.pathname.split("/");
+  const urlCouple = urlParts[2]; // Ambil nilai dari posisi indeks 2
+
   const handleCopyText = (text) => {
     navigator.clipboard.writeText(text);
     setCopiedText(text);
@@ -63,9 +68,9 @@ const ForYouPage = () => {
   };
 
   const handleReloadPage = () => {
-    const dynamicURL = `http://localhost:3000/wedding?name=${encodeURIComponent(
-      name
-    )}`;
+    const dynamicURL = `/wedding/${encodeURIComponent(
+      urlCouple
+    )}/?to=${encodeURIComponent(name)}`;
     window.location.href = dynamicURL;
   };
 
@@ -73,16 +78,10 @@ const ForYouPage = () => {
     const fetchInvitationDataByName = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/v1/foryous/search/${name}`
+          `http://localhost:8000/api/v1/invitation/search/${urlCouple}`
         );
         const data = await response.json();
         setInvitationData(data.data);
-
-        const invitationId = data.data?.invitation_id;
-
-        if (invitationId) {
-          fetchInvitationDataById(invitationId);
-        }
 
         console.log("Data from API:", data.data);
       } catch (error) {
@@ -90,23 +89,10 @@ const ForYouPage = () => {
       }
     };
 
-    if (name) {
+    if (urlCouple) {
       fetchInvitationDataByName();
     }
-  }, [name]);
-
-  const fetchInvitationDataById = async (invitationId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/v1/invitation/${invitationId}`
-      );
-      const data = await response.json();
-      setInvitationData(data);
-      console.log("Invitation Data:", data);
-    } catch (error) {
-      console.error("Error fetching invitation data by ID:", error);
-    }
-  };
+  }, [urlCouple]);
 
   useEffect(() => {
     const audioElement = document.getElementById("backgroundMusic");
@@ -121,7 +107,7 @@ const ForYouPage = () => {
     e.preventDefault();
 
     try {
-      if (invitationData?.data?.id) {
+      if (invitationData?.invitation?.id) {
         const response = await fetch(
           "http://localhost:8000/api/v1/wishes/create-wishes",
           {
@@ -132,7 +118,7 @@ const ForYouPage = () => {
             body: JSON.stringify({
               name: senderName,
               wish: wishText,
-              invitation_id: invitationData.data.id,
+              invitation_id: invitationData.invitation.id,
             }),
           }
         );
@@ -156,7 +142,7 @@ const ForYouPage = () => {
 
         <div
           style={{
-            backgroundImage: "url(/wedding.jpg)",
+            backgroundImage: `url(${invitationData?.invitation?.image})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
@@ -173,11 +159,11 @@ const ForYouPage = () => {
                 <div className="main-open">
                   <p className="text-white">WE ARE GETTING MARRIED</p>
                   <h1 className="text-white">
-                    {invitationData?.data?.groom} &{" "}
-                    {invitationData?.data?.bride}
+                    {invitationData?.invitation?.groom} &{" "}
+                    {invitationData?.invitation?.bride}
                   </h1>
                   <p className="text-white">
-                    {formatDate(invitationData?.data?.date)}
+                    {formatDate(invitationData?.invitation?.date)}
                   </p>
                 </div>
                 <Button
@@ -197,13 +183,13 @@ const ForYouPage = () => {
                   {isMusicPlaying ? (
                     <img
                       style={{ width: "100%", height: "auto" }}
-                      src="./resume.png"
+                      src="/resume.png"
                       alt="Resume"
                     />
                   ) : (
                     <img
                       style={{ width: "100%", height: "auto" }}
-                      src="./pause.png"
+                      src="/pause.png"
                       alt="Pause"
                     />
                   )}
@@ -230,17 +216,19 @@ const ForYouPage = () => {
                     <p
                       className="text-white"
                       style={{
-                        fontSize: "80px",
+                        fontSize: "120px",
                         fontFamily: "Playball, cursive",
                       }}
                     >
-                      {invitationData?.data?.groom}
+                      {invitationData?.invitation?.groom}
                     </p>
                     <p
                       className="text-white"
                       style={{
                         fontSize: "50px",
                         fontFamily: "Playball, cursive",
+                        marginBottom: "-40px",
+                        marginTop: "-40px",
                       }}
                     >
                       &
@@ -248,11 +236,11 @@ const ForYouPage = () => {
                     <p
                       className="text-white"
                       style={{
-                        fontSize: "80px",
+                        fontSize: "120px",
                         fontFamily: "Playball, cursive",
                       }}
                     >
-                      {invitationData?.data?.bride}
+                      {invitationData?.invitation?.bride}
                     </p>
                   </div>
                 </div>
@@ -262,7 +250,7 @@ const ForYouPage = () => {
                 >
                   <img
                     style={{ width: "15%", marginRight: "5px" }}
-                    src="./open-icon.png"
+                    src="/open-icon.png"
                     alt="Open Invitation"
                   />
                   Open Invitation
@@ -285,11 +273,11 @@ const ForYouPage = () => {
                   Di hadapan Allah dan orang-orang yang kita cintai, hari ini
                   kita bersumpah untuk mencintai dan menghargai satu sama lain
                   selamanya." */}
-                  {invitationData?.data?.quotes}
+                  {invitationData?.invitation?.quotes}
                 </p>
                 <p className="text-center mt-5">
                   {" "}
-                  {invitationData?.data?.quoter}
+                  {invitationData?.invitation?.quoter}
                 </p>
               </div>
             </div>
@@ -302,13 +290,15 @@ const ForYouPage = () => {
                   alt="Image 1"
                 />
                 <div className="image-text">
-                  <p className="cpl-married">{invitationData?.data?.groom}</p>
+                  <p className="cpl-married">
+                    {invitationData?.invitation?.groom}
+                  </p>
                   <p className="parents">The son of</p>
                   <p className="parents">
-                    Mr. {invitationData?.data?.groomDad}
+                    Mr. {invitationData?.invitation?.groomDad}
                   </p>
                   <p className="parents">
-                    & Mrs {invitationData?.data?.groomMom}
+                    & Mrs {invitationData?.invitation?.groomMom}
                   </p>
                 </div>
               </div>
@@ -319,13 +309,15 @@ const ForYouPage = () => {
                   alt="Image 2"
                 />
                 <div className="image-text">
-                  <p className="cpl-married">{invitationData?.data?.bride}</p>
+                  <p className="cpl-married">
+                    {invitationData?.invitation?.bride}
+                  </p>
                   <p className="parents">The daughter of</p>
                   <p className="parents">
-                    Mr. {invitationData?.data?.brideDad}
+                    Mr. {invitationData?.invitation?.brideDad}
                   </p>
                   <p className="parents">
-                    & Mrs {invitationData?.data?.brideMom}
+                    & Mrs {invitationData?.invitation?.brideMom}
                   </p>
                 </div>
               </div>
@@ -339,11 +331,11 @@ const ForYouPage = () => {
               <button>Add Calendar</button>
             </a>
             <h1 className="title-sect mt-5">Reception</h1>
-            <p>{formatDate(invitationData?.data?.date)}</p>
-            <p>{invitationData?.data?.time}</p>
-            <p>{invitationData?.data?.place}</p>
-            <p>{invitationData?.data?.address}</p>
-            <a href={invitationData?.data?.linkMap} target="_blank">
+            <p>{formatDate(invitationData?.invitation?.date)}</p>
+            <p>{invitationData?.invitation?.time}</p>
+            <p>{invitationData?.invitation?.place}</p>
+            <p>{invitationData?.invitation?.address}</p>
+            <a href={invitationData?.invitation?.linkMap} target="_blank">
               <button>View Location</button>
             </a>
           </div>
@@ -364,9 +356,17 @@ const ForYouPage = () => {
                 ></span>
               }
             >
-              {invitationData?.data?.stories.map((story, index) => (
+              {invitationData?.invitation?.stories.map((story, index) => (
                 <Carousel.Item key={index}>
                   <div className="carousel-content">
+                    <img
+                      src={story.image}
+                      alt="Story"
+                      style={{
+                        maxWidth: "10%", // Gambar tidak akan melebihi lebar wadah
+                        height: "auto", // Tinggi gambar disesuaikan agar proporsi terjaga
+                      }}
+                    />
                     <h1 style={{ color: "black" }}>{story.year}</h1>
                     <p style={{ color: "black" }}>{story.description}</p>
                   </div>
@@ -424,7 +424,7 @@ const ForYouPage = () => {
             <button className="wish-btn">
               <img
                 style={{ width: "10%", marginBottom: "3px" }}
-                src="./wish.png"
+                src="/wish.png"
               />
               <a href="#wishes">Write your wish</a>
             </button>
@@ -438,7 +438,7 @@ const ForYouPage = () => {
                 maxHeight: "320px", // Tentukan tinggi maksimal untuk menampilkan 5 item
               }}
             >
-              {invitationData?.data?.wishes.map((wish) => (
+              {invitationData?.invitation?.wishes.map((wish) => (
                 <div style={{ backgroundColor: "grey" }} key={wish.id}>
                   <h4>{wish.name}</h4>
                   <p>{wish.wish}</p>
@@ -474,7 +474,8 @@ const ForYouPage = () => {
             <div className="thankyou-couple mt-5">
               <h5 className="title-sect">Thank You</h5>
               <h1 className="title-sect">
-                {invitationData?.data?.groom} & {invitationData?.data?.bride}
+                {invitationData?.invitation?.groom} &{" "}
+                {invitationData?.invitation?.bride}
               </h1>
             </div>
           </div>
@@ -490,11 +491,11 @@ const ForYouPage = () => {
         <Modal.Body className="custom-modal-body">
           <button className="close-button" onClick={handleCloseGiftModal}>
             {/* Tambahkan logo silang di sini */}
-            <img src="./close-btn.png" alt="Close" />
+            <img src="/close-btn.png" alt="Close" />
           </button>
           <h1 className="text-center text-white">Virtual Blessings</h1>
           <div className="banks-container">
-            {invitationData?.data?.banks.map((bank, index) => (
+            {invitationData?.invitation?.banks.map((bank, index) => (
               <div className="bank-card" key={index}>
                 <img
                   style={{ width: "55%", marginTop: "20px" }}
@@ -528,11 +529,11 @@ const ForYouPage = () => {
             onClick={handleReloadPage}
           >
             {/* Tambahkan logo silang di sini */}
-            <img src="./close-btn.png" alt="Close" />
+            <img src="/close-btn.png" alt="Close" />
           </button>
           Your wish has been successfully sent
           <br />
-          <img className="thx" src="./thx.png" />
+          <img className="thx" src="/thx.png" />
         </Modal.Body>
       </Modal>
     </>

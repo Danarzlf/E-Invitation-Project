@@ -11,14 +11,14 @@ async function sendEmailResetPassword(email, link) {
     port: 587, // Replace with your SMTP port
     secure: false, // Set to true if using a secure connection (TLS/SSL)
     auth: {
-      user: "ferdy.lz2000@gmail.com", // Replace with your email address
-      pass: "dbnovvoivojmmkip", // Replace with your email password
+      user: "dnrfian168@gmail.com", // Replace with your email address
+      pass: "ovumjotoncsjiuzw", // Replace with your email password
     },
   });
 
   // Define email options
   const mailOptions = {
-    from: "ferdy.lz2000@gmail.com", // Replace with your email address
+    from: "NarrGather <noreply@example.com>", // Replace with your email address
     to: email, // Recipient's email address
     subject: "Reset Password", // Email subject
     // text: `Ikuti link berikut untuk melakukan reset password : ${link}`, // Email body
@@ -47,7 +47,6 @@ async function sendEmailResetPassword(email, link) {
           margin-right: auto;
         }
         h1 {
-          color: #7126b5;
           margin-top: 0;
         }
         p {
@@ -64,7 +63,7 @@ async function sendEmailResetPassword(email, link) {
           margin: 0 auto;
         }
         .box-purple {
-          background-color: #7126b5;
+          background-color: #343957;
           width: 100%;
           padding : 18px;
           height: 150px;
@@ -98,7 +97,7 @@ async function sendEmailResetPassword(email, link) {
     attachments: [
       {
         filename: "logofinal.png",
-        path: path.join(__dirname, "../public/images/logofinal.png"),
+        path: path.join(__dirname, "../public/images/narrgather1234.png"),
         cid: "logo",
       },
     ],

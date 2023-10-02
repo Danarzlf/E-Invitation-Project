@@ -78,6 +78,12 @@ module.exports = {
       brideSosmed3: {
         type: Sequelize.TEXT,
       },
+      urlCouple: {
+        type: Sequelize.STRING,
+      },
+      noTemplate: {
+        type: Sequelize.INTEGER,
+      },
       user_id: {
         type: Sequelize.INTEGER,
       },

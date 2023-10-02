@@ -1,0 +1,73 @@
+.navbar-otp {
+    background-color: white;
+    height: auto;
+  }
+  
+  .reset-page{
+    background-color: #343957;
+    height: 100vh; /* Set the height to 100% of viewport height */
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+  }
+  
+  
+  .logo-navbar {
+      width: 98px;
+      height: 53px;
+    }
+    
+    .otp-main {
+      width: 65% !important;
+    }
+    
+    .arrow-left {
+      width: 24px;
+      height: 24px;
+    }
+    
+    .otp-main-2 {
+      width: 50% !important;
+    }
+    
+    .otp-main-2 h1 {
+      font-size: 24px;
+    }
+    
+    .otp-main-2 form input {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      margin-right: 16px;
+      border: 1px solid #d0d0d0;
+    }
+    
+    .otp__btn {
+      background-color: #343957 !important;
+      height: 48px;
+      color: white !important;
+    }
+    
+    .otp__btn:hover,
+    .otp__btn:active {
+      background-color: #095f62 !important;
+    }
+    
+    @media screen and (max-width: 576px) {
+      .otp-main-2 form input {
+        width: 38px;
+        height: 38px;
+      }
+    }
+    
+    @media screen and (max-width: 765px) {
+      .otp-main {
+        width: 90% !important;
+      }
+    
+      .otp-main-2 {
+        width: 90% !important;
+      }
+    }

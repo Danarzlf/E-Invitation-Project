@@ -22,6 +22,9 @@ import NoAccess from "./components/Expenses/NoAccess";
 import ClientPage from "./components/Home/ClientPage";
 import AdminProfile from "./components/Home/AdminProfile";
 import ForYouPage from "./components/Home/ForYouPage";
+import Forget from "./components/Home/Forget";
+import Reset from "./components/Home/Reset";
+import DetailPage from "./components/Home/DetailPage";
 
 const App = () => {
   return (
@@ -35,7 +38,10 @@ const App = () => {
         <Route path="/otp-verify" element={<OTP />} />
         <Route path="/who?" element={<NoAccess />} />
         <Route path="/admin-profile" element={<AdminProfile />} />
-        <Route path="/wedding" element={<ForYouPage />} />
+        <Route path="/forget-password" element={<Forget />} />
+        <Route path="/reset-password" element={<Reset />} />
+        <Route path="/wedding/:urlCouple" element={<ForYouPage />} />
+        <Route path="/detail-page" element={<DetailPage />} />
         {/* <Route path="/for-you" element={<ForYouPage />} /> */}
 
         <Route path="*" element={<NotFoundPage />} />

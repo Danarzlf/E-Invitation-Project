@@ -53,6 +53,8 @@ module.exports = (sequelize, DataTypes) => {
       brideSosmed1: DataTypes.TEXT,
       brideSosmed2: DataTypes.TEXT,
       brideSosmed3: DataTypes.TEXT,
+      urlCouple: DataTypes.STRING,
+      noTemplate: DataTypes.INTEGER,
       user_id: DataTypes.INTEGER,
     },
     {

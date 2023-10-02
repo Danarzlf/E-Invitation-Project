@@ -1,0 +1,33 @@
+.reset-box {
+    background-color: white;
+    width: 900px;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 335px;
+
+}   
+
+.reset__btn {
+    background-color: #343957 !important;
+    height: 48px;
+    color: white !important;
+    width: 400px;
+    margin-top : 60px;
+    margin-bottom: -20px;
+  }
+
+  .reset-pass {
+    margin-left: 130px;
+    font-size: 24px;
+  }
+
+.email-reset {
+    margin-left: 90px;
+    
+}
+
+  .input-reset {
+    width: 600px;
+    margin: auto;
+  }
+  
